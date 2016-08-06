@@ -1,36 +1,62 @@
 package ca.cmpt213.courseplanner;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 public class Course {
-    private int semester;
-    private int enrollmentCapacity;
-    private int enrollment;
-
     private String subject;
-    private String catalogNumber;
-    private String location;
-    private String componentCode;
+    private String catalogueNumber;
+    private List<Offering> offerings = new ArrayList<>();
 
-    private String[] instructors;
-
-    public Course(int semester,
-                  String subject,
-                  String catalogNumber,
-                  String location,
-                  int enrollmentCapacity,
-                  int enrollment,
-                  String[] instructors,
-                  String componentCode) {
-        this.semester = semester;
+    public Course(String subject,  String catalogueNumber) {
         this.subject = subject;
-        this.catalogNumber = catalogNumber;
-        this.location = location;
-        this.enrollmentCapacity = enrollmentCapacity;
-        this.enrollment = enrollment;
-        this.instructors = instructors;
-        this.componentCode = componentCode;
+        this.catalogueNumber = catalogueNumber;
+        offerings = new ArrayList<>();
+    }
+
+    public void addOffering(int semester, String location, String[] instructors) {
+        offerings.add(new Offering(semester, location, instructors));
+    }
+
+    private static void sortOfferingsBySemester(List<Offering> offeringList) {
+        Comparator<Offering> offeringSorter = new Comparator<Offering>() {
+            @Override
+            public int compare(Offering offer1, Offering offer2) {
+                return offer1.getSemester() - offer2.getSemester();
+            }
+        };
+        java.util.Collections.sort(offeringList, offeringSorter);
+    }
+
+    private String getOfferingsString() {
+        sortOfferingsBySemester(offerings);
+        String result = "";
+        for (Offering offering : offerings) {
+            result += "\t" + offering.toString() + "\n";
+        }
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return subject + " " + catalogueNumber + "\n" + getOfferingsString();
+    }
+
+    public Offering getOffering(int index) {
+        return this.offerings.get(index);
+    }
+
+    public String getSubject() {
+        return this.subject;
+    }
+
+    public String getCatalogueNumber() {
+        return this.catalogueNumber;
+    }
+
+    public int getOfferingsSize() {
+        return offerings.size();
     }
 }

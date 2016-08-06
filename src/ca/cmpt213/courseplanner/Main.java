@@ -9,5 +9,6 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Model model = new Model();
         model.getData();
+        model.dumpModel();
     }
 }
