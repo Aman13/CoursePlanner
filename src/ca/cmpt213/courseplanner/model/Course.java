@@ -1,4 +1,4 @@
-package ca.cmpt213.courseplanner;
+package ca.cmpt213.courseplanner.model;
 
 
 import java.util.ArrayList;

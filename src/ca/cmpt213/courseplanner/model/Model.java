@@ -1,12 +1,13 @@
-package ca.cmpt213.courseplanner;
+package ca.cmpt213.courseplanner.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+
+import static java.util.Collections.sort;
 
 public class Model {
 
@@ -39,36 +40,6 @@ public class Model {
                 //System.out.println(line);
                 String[] courseData = line.split(",");
                 lineList.add(courseData);
-//                int semester = Integer.parseInt(courseData[0]);
-//                int enrollmentCapacity = Integer.parseInt(courseData[4]);
-//                int enrollmentTotal = Integer.parseInt(courseData[5]);
-//                if (courseData.length == DEFAULT_SIZE) {
-//                    String[] instructorArray = {courseData[6]};
-//                    courseList.add(new Course(
-//                            semester,
-//                            courseData[1],
-//                            courseData[2],
-//                            courseData[3],
-//                            enrollmentCapacity,
-//                            enrollmentTotal,
-//                            instructorArray,
-//                            courseData[7]));
-//                } else {
-//                    int size = courseData.length - 7;
-//                    String[] instructorArray = new String[size];
-//                    for (int i = 0; i < size; i++) {
-//                        instructorArray[i] = courseData[6 + i];
-//                    }
-//                    courseList.add(new Course(
-//                            semester,
-//                            courseData[1],
-//                            courseData[2],
-//                            courseData[3],
-//                            enrollmentCapacity,
-//                            enrollmentTotal,
-//                            instructorArray,
-//                            courseData[7]));
-//                }
             }
             scanner.close();
         } catch(Exception e) {
@@ -146,18 +117,15 @@ public class Model {
     }
 
     private static void sortCoursesInAlphabeticalOrder(List<Course> courseList) {
-        Comparator<Course> courseSorter = new Comparator<Course>() {
-            @Override
-            public int compare(Course course1, Course course2) {
-                int subjectComparison = course1.getSubject().compareTo(course2.getSubject());
-                if (subjectComparison != 0) {
-                    return subjectComparison;
-                } else {
-                    return course1.getCatalogueNumber().compareTo(course2.getCatalogueNumber());
-                }
+        Comparator<Course> courseSorter = (course1, course2) -> {
+            int subjectComparison = course1.getSubject().compareTo(course2.getSubject());
+            if (subjectComparison != 0) {
+                return subjectComparison;
+            } else {
+                return course1.getCatalogueNumber().compareTo(course2.getCatalogueNumber());
             }
         };
-        java.util.Collections.sort(courseList, courseSorter);
+        sort(courseList, courseSorter);
     }
 
 
