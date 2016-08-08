@@ -3,13 +3,7 @@ package ca.cmpt213.courseplanner.model;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
-
-import static java.util.Collections.sort;
+import java.util.*;
 
 public class Model {
 
@@ -25,25 +19,24 @@ public class Model {
     public static final String COURSE_DATA_FILE = "data/course_data_2016.csv";
     public static final File OUTPUT = new File("data/output_dump.txt");
 
-//    private String line;
-
     private HashMap<String, Department> departments;
 
-    private List<Course> courseList;
     private List<String[]> lineList;
 
+    private List<CoursePlannerObserver> observers = new ArrayList<>();
+    private String departmentSelected;
+
     public Model () {
-        courseList = new ArrayList<>();
         lineList = new ArrayList<>();
         try {
             getData();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        parseFile();
+        buildDepartments();
     }
 
-    private void parseFile() {
+    private void buildDepartments() {
         departments = new HashMap<>();
         for (String[] line: lineList) {
             Course currentCourse = new Course(line[SUBJECT], line[CATALOGUE_NUMBER]);
@@ -52,22 +45,19 @@ public class Model {
             if (departments.size() == 0) {
                 Department newDepartment = new Department(currentCourse.getSubject());
                 departments.put(newDepartment.getName(), newDepartment);
-                //Add offering
                 addOffering(line, currentCourse);
-                //Add course component
                 Offering currentOffering = currentCourse.getOffering(currentCourse.getOfferingsSize() - 1);
                 currentOffering.addComponent(Integer.parseInt(line[ENROLLMENT_CAPACITY]),
                         Integer.parseInt(line[ENROLLMENT_TOTAL]),
                         line[line.length - 1]);
-                //Add Course to Department
                 newDepartment.addCourse(currentCourse);
 
+            // Check if Department exists add course to existing department
             } else if (departments.containsKey(currentCourse.getSubject())) {
-                //Department exists add course to existing department
                 Department department = departments.get(currentCourse.getSubject());
 
+                // Check if Course exists (cmpt 322w)
                 if (department.hasCourse(currentCourse)) {
-                    //Course exists add new offering or section
                     Course equivalentCourse = department.getCourse(currentCourse);
 
                     //Check if offering exists
@@ -90,9 +80,7 @@ public class Model {
                     }
                 } else {
                     //Add new course to same department
-                    //Add offering
                     addOffering(line, currentCourse);
-                    //Add section
                     Offering currentOffering = currentCourse.getOffering(currentCourse.getOfferingsSize() - 1);
                     currentOffering.addComponent(Integer.parseInt(line[ENROLLMENT_CAPACITY]),
                             Integer.parseInt(line[ENROLLMENT_TOTAL]),
@@ -107,8 +95,8 @@ public class Model {
                 addOffering(line, currentCourse);
                 Offering currentOffering = currentCourse.getOffering(currentCourse.getOfferingsSize() - 1);
                 currentOffering.addComponent(Integer.parseInt(line[ENROLLMENT_CAPACITY]), Integer.parseInt(line[ENROLLMENT_TOTAL]), line[line.length - 1]);
+                newDepartment.addCourse(currentCourse);
             }
-
         }
     }
 
@@ -147,100 +135,22 @@ public class Model {
         } catch(Exception e) {
             System.out.println("problems");
         }
-//        buildCourseObjects();
     }
 
-    private void buildCourseObjects() {
-        while (lineList.size() > 0) {
-            //Utility
-            List<String[]> equivalentCourse = new ArrayList<>();
-            // Gather all same course
-            String[] currentLine = lineList.get(0);
-            Course currentCourse = new Course(currentLine[SUBJECT], currentLine[CATALOGUE_NUMBER]);
-            courseList.add(currentCourse);
-            lineList.remove(0);
-            equivalentCourse.add(currentLine);
-            //Search for course
-            int i = 0;
-            while (i < lineList.size()) {
-//            for (int i = 0; i < lineList.size(); i ++) {
-                String[] targetLine = lineList.get(i);
-                if (currentLine[SUBJECT].equals(targetLine[SUBJECT])
-                        && currentLine[CATALOGUE_NUMBER].equals(targetLine[CATALOGUE_NUMBER])) {
-                    equivalentCourse.add(targetLine);
-                    lineList.remove(i);
-                    i--;
-                }
-                i++;
-            }
-            //Create Course
-            while (equivalentCourse.size() > 0) {
-                String[] currentOffering = equivalentCourse.get(0);
-
-                if (currentOffering.length == DEFAULT_SIZE) {
-                    String[] instructorArray = {currentOffering[INSTRUCTOR]};
-                    currentCourse.addOffering(
-                            Integer.parseInt(currentOffering[SEMESTER]),
-                            currentOffering[LOCATION],
-                            instructorArray);
-                } else {
-                    int size = currentOffering.length - 7;
-                    String[] instructorArray = new String[size];
-                    for (int j = 0; j < size; j++) {
-                        instructorArray[j] = currentOffering[6 + j];
-                    }
-                    currentCourse.addOffering(
-                            Integer.parseInt(currentOffering[SEMESTER]),
-                            currentOffering[LOCATION],
-                            instructorArray);
-                }
-                equivalentCourse.remove(0);
-                Offering thisOffering = currentCourse.getOffering(currentCourse.getOfferingsSize()-1);
-                thisOffering.addComponent(Integer.parseInt(currentOffering[ENROLLMENT_CAPACITY]),
-                        Integer.parseInt(currentOffering[ENROLLMENT_TOTAL]),
-                        currentOffering[currentOffering.length - 1]);
-                int j = 0;
-                while (j < equivalentCourse.size()) {
-                    String[] targetOffering = equivalentCourse.get(j);
-                    if (currentOffering[SEMESTER].equals(targetOffering[SEMESTER])
-                            && currentOffering[LOCATION].equals(targetOffering[LOCATION])
-                            && currentOffering[INSTRUCTOR].equals(targetOffering[INSTRUCTOR])){
-                        thisOffering.addComponent(Integer.parseInt(targetOffering[ENROLLMENT_CAPACITY]),
-                                Integer.parseInt(targetOffering[ENROLLMENT_TOTAL]),
-                                targetOffering[targetOffering.length - 1]);
-                        equivalentCourse.remove(j);
-                        j--;
-                    }
-                    j++;
-                }
-            }
-
-        }
+    public String[] getDepartmentNames() {
+        String[] departmentNames = new String [departments.size()];
+        departments.keySet().toArray(departmentNames);
+        Arrays.sort(departmentNames);
+        return departmentNames;
     }
 
-    private static void sortCoursesInAlphabeticalOrder(List<Course> courseList) {
-        Comparator<Course> courseSorter = (course1, course2) -> {
-            int subjectComparison = course1.getSubject().compareTo(course2.getSubject());
-            if (subjectComparison != 0) {
-                return subjectComparison;
-            } else {
-                return course1.getCatalogueNumber().compareTo(course2.getCatalogueNumber());
-            }
-        };
-        sort(courseList, courseSorter);
-    }
-
-    public void printSubject() {
-        for (Course course : courseList) {
-            System.out.println(course.getSubject());
-        }
+    public void departmentFilter(String department) {
+        departmentSelected = department;
+        System.out.println(departmentSelected);
+        notifyObservers();
     }
 
     public void dumpModel() {
-//        sortCoursesInAlphabeticalOrder(courseList);
-//        for (Course course : courseList) {
-//            System.out.printf("%s", course.toString());
-//        }
 //        for (Department department : departments.values()) {
 //            Course[] courses = department.getAllCourses();
 //            for (Course course : courses) {
@@ -261,4 +171,15 @@ public class Model {
             e.printStackTrace();
         }
     }
+
+    public void addObserver(CoursePlannerObserver observer) {
+        observers.add(observer);
+    }
+
+    private void notifyObservers() {
+        for (CoursePlannerObserver observer : observers) {
+            observer.stateChanged();
+        }
+    }
+
 }
