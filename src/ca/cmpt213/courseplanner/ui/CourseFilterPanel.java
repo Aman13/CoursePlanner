@@ -1,5 +1,6 @@
 package ca.cmpt213.courseplanner.ui;
 
+import ca.cmpt213.courseplanner.model.Course;
 import ca.cmpt213.courseplanner.model.Model;
 
 import javax.swing.Box;
@@ -41,7 +42,6 @@ public class CourseFilterPanel extends BasePanel {
         courseFilterPanel.setLayout(new BorderLayout());
         courseFilterPanel.add(makeDropDown(), BorderLayout.NORTH);
         courseFilterPanel.add(makeUpdateBtn(), BorderLayout.SOUTH);
-
         return courseFilterPanel;
     }
 
@@ -54,7 +54,11 @@ public class CourseFilterPanel extends BasePanel {
 
         updateBtn.addActionListener(e -> {
             String option = (String) departmentBox.getSelectedItem();
-            getModel().departmentFilter(option);
+            getModel().setCurrentDepartment(option);
+            Course[] displayCourses = getModel().getCurrentCourses();
+            for (Course course : displayCourses) {
+                System.out.println(course.getTitle());
+            }
         });
         return btnPanel;
     }

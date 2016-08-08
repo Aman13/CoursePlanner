@@ -1,9 +1,11 @@
 package ca.cmpt213.courseplanner.model;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.List;
 
 public class Model {
 
@@ -23,8 +25,12 @@ public class Model {
 
     private List<String[]> lineList;
 
-    private List<CoursePlannerObserver> observers = new ArrayList<>();
+    private List<CoursePlannerObserver> observers;
     private String departmentSelected;
+    private Course[] currentCourses;
+    private Course courseSelected;
+    private List<Offering> currentOfferings;
+    private Offering offeringSelected;
 
     public Model () {
         lineList = new ArrayList<>();
@@ -34,6 +40,46 @@ public class Model {
             e.printStackTrace();
         }
         buildDepartments();
+        observers = new ArrayList<>();
+        currentOfferings = new ArrayList<>();
+        departmentSelected = "";
+    }
+
+    public void setCurrentDepartment(String department) {
+        departmentSelected = department;
+        currentCourses = departments.get(department).getAllCourses();
+        notifyObservers();
+    }
+
+    public void setCurrentCourse(Course course) {
+        courseSelected = course;
+        currentOfferings = course.getAllOfferings();
+        notifyObservers();
+    }
+
+    public void setCurrentOffering(Offering offering) {
+        offeringSelected = offering;
+        notifyObservers();
+    }
+
+    public String getDepartmentSelected() {
+        return departmentSelected;
+    }
+
+    public Course[] getCurrentCourses() {
+        return currentCourses;
+    }
+
+    public Course getCourseSelected() {
+        return courseSelected;
+    }
+
+    public List<Offering> getCurrentOfferings() {
+        return currentOfferings;
+    }
+
+    public Offering getOfferingSelected() {
+        return offeringSelected;
     }
 
     private void buildDepartments() {
@@ -142,12 +188,6 @@ public class Model {
         departments.keySet().toArray(departmentNames);
         Arrays.sort(departmentNames);
         return departmentNames;
-    }
-
-    public void departmentFilter(String department) {
-        departmentSelected = department;
-        System.out.println(departmentSelected);
-        notifyObservers();
     }
 
     public void dumpModel() {

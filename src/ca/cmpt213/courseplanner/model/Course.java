@@ -58,6 +58,10 @@ public class Course {
         return this.offerings.get(index);
     }
 
+    public List<Offering> getAllOfferings() {
+        return offerings;
+    }
+
     public Offering getOffering(String[] line) {
         String[] instructorsArray = getInstructors(line);
         boolean allInstructorsMatch;
