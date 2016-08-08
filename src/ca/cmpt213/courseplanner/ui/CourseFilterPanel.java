@@ -52,7 +52,7 @@ public class CourseFilterPanel extends BasePanel {
         btnPanel.add(Box.createHorizontalGlue());
         btnPanel.add(updateBtn);
 
-        updateBtn.addActionListener(e -> {
+        updateBtn.addActionListener(event -> {
             String option = (String) departmentBox.getSelectedItem();
             getModel().setCurrentDepartment(option);
             Course[] displayCourses = getModel().getCurrentCourses();

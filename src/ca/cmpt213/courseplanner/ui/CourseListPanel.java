@@ -13,6 +13,9 @@ public class CourseListPanel extends BasePanel {
     private JPanel courseListPanel;
     private JList<Course> list;
     private Course[] courseList;
+    private final int CELL_WIDTH = 80;
+    private final int SCROLL_PANE_WIDTH = 210;
+    private final int SCROLL_PANE_HEIGHT = 300;
 
     public CourseListPanel(Model model) {
         super(model, TITLE);
@@ -35,7 +38,9 @@ public class CourseListPanel extends BasePanel {
         list.setLayoutOrientation(list.HORIZONTAL_WRAP);
         list.setVisibleRowCount(-1);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list.setFixedCellWidth(CELL_WIDTH);
         DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+        defaultRenderer.setLayout(new GridLayout(1, 2));
         list.setCellRenderer(new ListCellRenderer<Course>() {
             @Override
             public Component getListCellRendererComponent(JList<? extends Course> list, Course course, int index, boolean isSelected, boolean cellHasFocus) {
@@ -44,8 +49,8 @@ public class CourseListPanel extends BasePanel {
                 return renderer;
             }
         });
-        list.addListSelectionListener(e -> {
-            if (!e.getValueIsAdjusting()) {
+        list.addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting()) {
                 if (list.isSelectionEmpty()) {
                     //do nothing
                 } else {
@@ -55,7 +60,7 @@ public class CourseListPanel extends BasePanel {
             }
         });
         JScrollPane listPane = new JScrollPane(list);
-        listPane.setPreferredSize(new Dimension(150, 300));
+        listPane.setPreferredSize(new Dimension(SCROLL_PANE_WIDTH, SCROLL_PANE_HEIGHT));
         return listPane;
     }
 
