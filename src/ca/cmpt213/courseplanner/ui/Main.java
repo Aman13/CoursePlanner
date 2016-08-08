@@ -4,20 +4,14 @@ import ca.cmpt213.courseplanner.model.Model;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.io.FileNotFoundException;
 
 public class Main {
 
     public static void main(String[] args) {
         Model model = new Model();
-        try {
-            model.getData();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-//        model.dumpModel();
-
+        model.dumpModel();
         //Left Panel
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));

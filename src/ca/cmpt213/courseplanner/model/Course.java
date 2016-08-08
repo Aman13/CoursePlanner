@@ -6,9 +6,15 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Course {
+
+    private static final int DEFAULT_SIZE = 8;
+    private static final int SEMESTER = 0;
+    private static final int LOCATION = 3;
+    private static final int INSTRUCTOR = 6;
+
     private String subject;
     private String catalogueNumber;
-    private List<Offering> offerings = new ArrayList<>();
+    private List<Offering> offerings;
 
     public Course(String subject,  String catalogueNumber) {
         this.subject = subject;
@@ -18,6 +24,10 @@ public class Course {
 
     public void addOffering(int semester, String location, String[] instructors) {
         offerings.add(new Offering(semester, location, instructors));
+    }
+
+    public String getTitle() {
+        return this.subject + " " + this.catalogueNumber;
     }
 
     private static void sortOfferingsBySemester(List<Offering> offeringList) {
@@ -48,6 +58,30 @@ public class Course {
         return this.offerings.get(index);
     }
 
+    public Offering getOffering(String[] line) {
+        String[] instructorsArray = getInstructors(line);
+        boolean allInstructorsMatch;
+        for (Offering offering: offerings) {
+            allInstructorsMatch = true;
+            if (offering.getSemester() == Integer.parseInt(line[SEMESTER])
+                    && offering.getLocation().equals(line[LOCATION])) {
+                if (instructorsArray.length == offering.getInstructors().length) {
+                    for (int i = 0; i < instructorsArray.length; i++) {
+                        if (offering.getInstructors()[i].equals(instructorsArray[i])) {
+                            // Do nothing allinstructors remains true;
+                        } else {
+                            allInstructorsMatch = false;
+                        }
+                    }
+                    if (allInstructorsMatch) {
+                        return offering;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public String getSubject() {
         return this.subject;
     }
@@ -58,5 +92,44 @@ public class Course {
 
     public int getOfferingsSize() {
         return offerings.size();
+    }
+
+    public Boolean hasEquivalentOffering(String[] line) {
+        String[] instructorsArray = getInstructors(line);
+        boolean allInstructorsMatch;
+        for (Offering offering: offerings) {
+            allInstructorsMatch = true;
+            if (offering.getSemester() == Integer.parseInt(line[SEMESTER])
+                    && offering.getLocation().equals(line[LOCATION])) {
+                if (instructorsArray.length == offering.getInstructors().length) {
+                    for (int i = 0; i < instructorsArray.length; i++) {
+                        if (offering.getInstructors()[i].equals(instructorsArray[i])) {
+                            // Do nothing allinstructors remains true;
+                        } else {
+                            allInstructorsMatch = false;
+                        }
+                    }
+                    if (allInstructorsMatch) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    private String[] getInstructors(String[] line) {
+        if (line.length == DEFAULT_SIZE) {
+            String[] instructorArray = {line[INSTRUCTOR]};
+            return instructorArray;
+
+        } else {
+            int size = line.length - 7;
+            String[] instructorArray = new String[size];
+            for (int j = 0; j < size; j++) {
+                instructorArray[j] = line[6 + j];
+            }
+            return instructorArray;
+        }
     }
 }

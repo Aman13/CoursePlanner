@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CourseFilterPanel extends BasePanel {
-    private static final long serialVersionUID = 1L;
     private static String TITLE = "Course List Filter";
     private JPanel courseFilterPanel;
 
