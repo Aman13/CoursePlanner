@@ -11,13 +11,7 @@ public class Main {
 
     public static void main(String[] args) {
         Model model = new Model();
-        try {
-            model.getData();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-//        model.dumpModel();
-
+        model.dumpModel();
         //Left Panel
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));

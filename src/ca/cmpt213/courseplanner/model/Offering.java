@@ -1,9 +1,13 @@
 package ca.cmpt213.courseplanner.model;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Offering {
+    private static final int ENROLLMENT_CAPACITY = 4;
+    private static final int ENROLLMENT_TOTAL = 5;
 
     private int semester;
     private String location;
@@ -61,5 +65,15 @@ public class Offering {
         return semester + " in " + "location" + " by " + getInstructorsString() + "\n" + getComponentsString();
     }
 
+    public Boolean hasEquivalentComponent(String[] line) {
+        for (CourseComponent component: courseComponents) {
+            if (line[line.length - 1] == component.getComponentCode()
+                && Integer.parseInt(line[ENROLLMENT_TOTAL]) == component.getEnrollmentTotal()
+                && Integer.parseInt(line[ENROLLMENT_CAPACITY]) == component.getEnrollmentCapacity()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
