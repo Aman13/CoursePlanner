@@ -4,7 +4,7 @@ import ca.cmpt213.courseplanner.model.Model;
 
 import javax.swing.*;
 import javax.swing.border.Border;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.io.FileNotFoundException;
 
 public class Main {

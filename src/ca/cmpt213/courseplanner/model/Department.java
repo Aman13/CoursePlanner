@@ -16,7 +16,15 @@ public class Department {
     }
 
     public boolean hasCourse(Course course) {
-        return courseList.containsValue(course);
+        Course[] courses = new Course[courseList.size()];
+        courseList.values().toArray(courses);
+        for (Course existingCourse : courses) {
+            if (existingCourse.getSubject().equals(course.getSubject())
+                    && existingCourse.getCatalogueNumber().equals(course.getCatalogueNumber())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public Course getCourse(Course course) {

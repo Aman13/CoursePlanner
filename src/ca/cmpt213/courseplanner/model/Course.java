@@ -60,11 +60,23 @@ public class Course {
 
     public Offering getOffering(String[] line) {
         String[] instructorsArray = getInstructors(line);
+        boolean allInstructorsMatch;
         for (Offering offering: offerings) {
+            allInstructorsMatch = true;
             if (offering.getSemester() == Integer.parseInt(line[SEMESTER])
-                    && offering.getLocation() == line[LOCATION]
-                    && offering.getInstructors() == instructorsArray) {
-                return offering;
+                    && offering.getLocation().equals(line[LOCATION])) {
+                if (instructorsArray.length == offering.getInstructors().length) {
+                    for (int i = 0; i < instructorsArray.length; i++) {
+                        if (offering.getInstructors()[i].equals(instructorsArray[i])) {
+                            // Do nothing allinstructors remains true;
+                        } else {
+                            allInstructorsMatch = false;
+                        }
+                    }
+                    if (allInstructorsMatch) {
+                        return offering;
+                    }
+                }
             }
         }
         return null;
@@ -84,11 +96,23 @@ public class Course {
 
     public Boolean hasEquivalentOffering(String[] line) {
         String[] instructorsArray = getInstructors(line);
+        boolean allInstructorsMatch;
         for (Offering offering: offerings) {
+            allInstructorsMatch = true;
             if (offering.getSemester() == Integer.parseInt(line[SEMESTER])
-                    && offering.getLocation() == line[LOCATION]
-                    && offering.getInstructors() == instructorsArray) {
-                return true;
+                    && offering.getLocation().equals(line[LOCATION])) {
+                if (instructorsArray.length == offering.getInstructors().length) {
+                    for (int i = 0; i < instructorsArray.length; i++) {
+                        if (offering.getInstructors()[i].equals(instructorsArray[i])) {
+                            // Do nothing allinstructors remains true;
+                        } else {
+                            allInstructorsMatch = false;
+                        }
+                    }
+                    if (allInstructorsMatch) {
+                        return true;
+                    }
+                }
             }
         }
         return false;
@@ -97,13 +121,15 @@ public class Course {
     private String[] getInstructors(String[] line) {
         if (line.length == DEFAULT_SIZE) {
             String[] instructorArray = {line[INSTRUCTOR]};
+            return instructorArray;
+
         } else {
             int size = line.length - 7;
             String[] instructorArray = new String[size];
             for (int j = 0; j < size; j++) {
                 instructorArray[j] = line[6 + j];
             }
+            return instructorArray;
         }
-        return line;
     }
 }

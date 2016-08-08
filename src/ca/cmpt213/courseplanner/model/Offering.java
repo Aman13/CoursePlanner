@@ -62,7 +62,7 @@ public class Offering {
 
     @Override
     public String toString() {
-        return semester + " in " + "location" + " by " + getInstructorsString() + "\n" + getComponentsString();
+        return semester + " in " + getLocation() + " by " + getInstructorsString() + "\n" + getComponentsString();
     }
 
     public Boolean hasEquivalentComponent(String[] line) {

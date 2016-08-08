@@ -2,6 +2,7 @@ package ca.cmpt213.courseplanner.model;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -22,6 +23,7 @@ public class Model {
     private static final int INSTRUCTOR = 6;
 
     public static final String COURSE_DATA_FILE = "data/course_data_2016.csv";
+    public static final File OUTPUT = new File("data/output_dump.txt");
 
 //    private String line;
 
@@ -81,7 +83,7 @@ public class Model {
                         //Add offering
                         addOffering(line, equivalentCourse);
                         //Add course component
-                        Offering currentOffering = currentCourse.getOffering(currentCourse.getOfferingsSize() - 1);
+                        Offering currentOffering = equivalentCourse.getOffering(equivalentCourse.getOfferingsSize() - 1);
                         currentOffering.addComponent(Integer.parseInt(line[ENROLLMENT_CAPACITY]),
                                 Integer.parseInt(line[ENROLLMENT_TOTAL]),
                                 line[line.length - 1]);
@@ -239,11 +241,24 @@ public class Model {
 //        for (Course course : courseList) {
 //            System.out.printf("%s", course.toString());
 //        }
-        for (Department department : departments.values()) {
-            Course[] courses = department.getAllCourses();
-            for (Course course : courses) {
-                System.out.println(course.toString());
+//        for (Department department : departments.values()) {
+//            Course[] courses = department.getAllCourses();
+//            for (Course course : courses) {
+//                System.out.println(course.toString());
+//            }
+//        }
+        try {
+            PrintWriter writer = new PrintWriter(OUTPUT);
+            for (Department department : departments.values()) {
+                Course[] courses = department.getAllCourses();
+                for (Course course : courses) {
+                    writer.printf(course.toString());
+                }
             }
+            writer.close();
+            System.out.println("Course info written to output file: " + OUTPUT.getAbsolutePath());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
