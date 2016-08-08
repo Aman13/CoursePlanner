@@ -39,4 +39,8 @@ public abstract class BasePanel extends JPanel {
         this.setMaximumSize(currentSize);
     }
 
+    protected Model getModel() {
+        return this.model;
+    }
+
 }
