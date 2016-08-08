@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
 
@@ -67,6 +68,7 @@ public class Model {
     }
 
     public Course[] getCurrentCourses() {
+        sortCurrentCourses(currentCourses);
         return currentCourses;
     }
 
@@ -81,6 +83,17 @@ public class Model {
     public Offering getOfferingSelected() {
         return offeringSelected;
     }
+
+    private static void sortCurrentCourses(Course[] courses) {
+        Comparator<Course> courseSorter = new Comparator<Course>() {
+            @Override
+            public int compare(Course course1, Course course2) {
+                return course1.getTitle().compareTo(course2.getTitle());
+            }
+        };
+        Arrays.sort(courses, courseSorter);
+    }
+
 
     private void buildDepartments() {
         departments = new HashMap<>();
@@ -189,6 +202,7 @@ public class Model {
         Arrays.sort(departmentNames);
         return departmentNames;
     }
+
 
     public void dumpModel() {
 //        for (Department department : departments.values()) {

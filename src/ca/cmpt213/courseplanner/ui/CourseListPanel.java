@@ -55,7 +55,7 @@ public class CourseListPanel extends BasePanel {
             }
         });
         JScrollPane listPane = new JScrollPane(list);
-        listPane.setPreferredSize(new Dimension(100, 300));
+        listPane.setPreferredSize(new Dimension(150, 300));
         return listPane;
     }
 
