@@ -3,12 +3,7 @@ package ca.cmpt213.courseplanner.ui;
 import ca.cmpt213.courseplanner.model.Course;
 import ca.cmpt213.courseplanner.model.Model;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -20,6 +15,8 @@ public class CourseFilterPanel extends BasePanel {
     private JPanel courseFilterPanel;
 
     protected JComboBox departmentBox;
+    protected JCheckBox gradCheckBox;
+    protected JCheckBox underGradCheckBox;
 
     public CourseFilterPanel(Model model) {
         super(model, TITLE);
@@ -41,6 +38,7 @@ public class CourseFilterPanel extends BasePanel {
         courseFilterPanel = new JPanel();
         courseFilterPanel.setLayout(new BorderLayout());
         courseFilterPanel.add(makeDropDown(), BorderLayout.NORTH);
+        courseFilterPanel.add(makeCheckBox(), BorderLayout.CENTER);
         courseFilterPanel.add(makeUpdateBtn(), BorderLayout.SOUTH);
         return courseFilterPanel;
     }
@@ -54,12 +52,20 @@ public class CourseFilterPanel extends BasePanel {
 
         updateBtn.addActionListener(event -> {
             String option = (String) departmentBox.getSelectedItem();
-            getModel().setCurrentDepartment(option);
-            Course[] displayCourses = getModel().getCurrentCourses();
-            for (Course course : displayCourses) {
-                System.out.println(course.getTitle());
-            }
+            getModel().setCurrentDepartment(option,
+                    underGradCheckBox.isSelected(),
+                    gradCheckBox.isSelected());
         });
         return btnPanel;
+    }
+
+    private Component makeCheckBox() {
+        JPanel checkBoxPanel = new JPanel();
+        checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.PAGE_AXIS));
+        underGradCheckBox = new JCheckBox("Include Grad Courses");
+        gradCheckBox = new JCheckBox("Include Undergrad Courses");
+        checkBoxPanel.add(underGradCheckBox);
+        checkBoxPanel.add(gradCheckBox);
+        return checkBoxPanel;
     }
 }

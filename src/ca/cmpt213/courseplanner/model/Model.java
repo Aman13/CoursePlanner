@@ -46,11 +46,27 @@ public class Model {
         departmentSelected = "";
     }
 
-    public void setCurrentDepartment(String department) {
+    public void setCurrentDepartment(String department, Boolean underGradCheck, Boolean gradCheck) {
         departmentSelected = department;
-        currentCourses = departments.get(department).getAllCourses();
-        notifyObservers();
+        if (underGradCheck || gradCheck) {
+            currentCourses = filterCourses(departments.get(department).getAllCourses(), underGradCheck, gradCheck);
+            notifyObservers();
+        }
     }
+
+    private Course[] filterCourses(Course[] allCourses, Boolean underGrad, Boolean grad) {
+      ArrayList<Course> filteredCourseList = new ArrayList<>();
+        for (Course course: allCourses) {
+            if (underGrad && grad) {
+                filteredCourseList.add(course);
+            } else if (underGrad && course.getCourseNumber() < 500 ){
+                filteredCourseList.add(course);
+            } else if (grad && course.getCourseNumber() >= 500) {
+                filteredCourseList.add(course);
+            }
+        }
+        return filteredCourseList.toArray(new Course[filteredCourseList.size()]);
+    };
 
     public void setCurrentCourse(Course course) {
         courseSelected = course;
