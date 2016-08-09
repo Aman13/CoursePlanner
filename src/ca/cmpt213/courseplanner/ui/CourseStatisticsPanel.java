@@ -32,7 +32,7 @@ public class CourseStatisticsPanel extends BasePanel {
     private final int VAN_INDEX = 2;
     private final int OTHER_INDEX = 3;
 
-    private final int GRAPH_SIZE = 200;
+    private final int GRAPH_SIZE = 250;
 
     public CourseStatisticsPanel(Model model) {
         super(model, TITLE);

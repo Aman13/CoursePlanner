@@ -49,6 +49,7 @@ public class Offering {
                     }
                     j++;
                 }
+                System.out.println(newCode);
                 currentComponents.add(new CourseComponent(newCapacity, newTotal, newCode));
             }
             return currentComponents;
