@@ -69,6 +69,7 @@ public class Model {
     };
 
     public void setCurrentCourse(Course course) {
+        System.out.println(course.getTitle());
         courseSelected = course;
         currentOfferings = course.getAllOfferings();
         course.sortOfferingsBySemester(currentOfferings);

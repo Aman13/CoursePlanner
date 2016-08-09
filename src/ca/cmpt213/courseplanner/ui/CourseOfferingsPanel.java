@@ -12,6 +12,8 @@ import java.util.List;
 
 public class CourseOfferingsPanel extends BasePanel {
     private static final int COLUMNS = 4;
+    private static final int HEIGHT = 800;
+    private static final int WIDTH = 500;
 
     private static final String TITLE = "Course Offerings By Semester";
 
@@ -27,42 +29,8 @@ public class CourseOfferingsPanel extends BasePanel {
     @Override
     public JPanel buildPanel() {
         courseOfferingPanel = new JPanel();
-        courseOfferingPanel.setLayout(new BorderLayout());
+        clearAndResetPanel();
         return courseOfferingPanel;
-//        courseOfferingPanel.setLayout(new GridBagLayout());
-//        offeringList = getModel().getCurrentOfferings();
-//        if (offeringList.size() > 0) {
-//            for (int x = 0; x < 4; x++) {
-//                for (int y = 0; y < Math.ceil(offeringList.size()/3) + 1; y++) {
-//                    GridBagConstraints constraint = makeGridBagConstraints(x, y);
-//                    getGridLabels(x, y);
-//                }
-//            }
-//        } else {
-//            JLabel noOfferings = new JLabel("No offerings available, please choose a course.");
-//            courseOfferingPanel.add(noOfferings);
-//        }
-//        return courseOfferingPanel;
-    }
-
-    private void getGridLabels(int x, int y) {
-        if (x == 0 || y == 0) {
-            //corner
-            String title = "";
-            if (x == 1) {
-                title = "Spring";
-            } else if (x == 2) {
-                title = "Summer";
-            } else if (x == 3) {
-                title = "Fall";
-            } else if (y != 0) {
-                int year = getEarliestYear() + y - 1;
-                title = title + year;
-            }
-            JLabel label = new JLabel(title);
-            courseOfferingPanel.add(label);
-            label.setBackground(Color.white);
-        }
     }
 
     private int getEarliestYear() {
@@ -73,33 +41,23 @@ public class CourseOfferingsPanel extends BasePanel {
         return offeringList.get(offeringList.size() - 1).getYear();
     }
 
-
-    private GridBagConstraints makeGridBagConstraints(int x, int y) {
-        GridBagConstraints constraint = new GridBagConstraints();
-        constraint.gridx = x;
-        constraint.gridy = y;
-        if (x == 0 && y == 0) {
-            //corner
-            constraint.gridheight = 50;
-            constraint.gridwidth = 50;
-        } else if (x > 0 && y == 0) {
-            //spring, summer, fall
-            constraint.gridheight = 50;
-        } else if (x == 0 && y > 0) {
-            //year labels
-            constraint.gridwidth = 50;
-        }
-        return constraint;
-    }
-
     private void registerAsObserver() {
         getModel().addCourseObserver(new CourseObserver() {
             @Override
             public void stateChanged() {
                 offeringList = getModel().getCurrentOfferings();
+                clearAndResetPanel();
                 updatePanel();
             }
         });
+    }
+
+    private void clearAndResetPanel() {
+        courseOfferingPanel.removeAll();
+        courseOfferingPanel.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        courseOfferingPanel.setLayout(new BorderLayout());
+        courseOfferingPanel.setBackground(Color.WHITE);
+        courseOfferingPanel.repaint();
     }
 
     private void updatePanel() {
@@ -113,6 +71,7 @@ public class CourseOfferingsPanel extends BasePanel {
         gridBagConstraints.gridy = 0;
         gridBagConstraints.weightx = 1;
         gridBagConstraints.weighty = 1;
+        gridBagConstraints.fill = GridBagConstraints.BOTH;
 
         //Add Label for Semester
         gridBagConstraints.gridx = 1;
@@ -122,9 +81,11 @@ public class CourseOfferingsPanel extends BasePanel {
         courseOfferingPanel.add(makeSemesterLabel("Summer"), gridBagConstraints);
         gridBagConstraints.gridx = 3;
         courseOfferingPanel.add(makeSemesterLabel("Fall"), gridBagConstraints);
-
+        System.out.println("earliest year: " + earliestYear);
+        System.out.println("latestYear: " + latestYear);
+        System.out.println("Range: " + rangeYear);
         //Loop to build offerings
-        for (int row = 0; row < rangeYear; row++) {
+        for (int row = 0; row < rangeYear + 1; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 gridBagConstraints.weightx = 0;
                 gridBagConstraints.weighty = 0;
@@ -140,13 +101,13 @@ public class CourseOfferingsPanel extends BasePanel {
                 }
             }
         }
-
+        courseOfferingPanel.revalidate();
         courseOfferingPanel.repaint();
     }
 
     private Component makeOfferingsButton(int row, int col) {
-        JPanel offeringButtonPanel = new JPanel();
-        offeringButtonPanel.setLayout(new BoxLayout(offeringButtonPanel, BoxLayout.PAGE_AXIS));
+        JPanel offeringsButtonPanel = new JPanel();
+        offeringsButtonPanel.setLayout(new BoxLayout(offeringsButtonPanel, BoxLayout.PAGE_AXIS));
         int currentYear = getEarliestYear() + row - 1;
         String semester = semesterConverter(col);
         //Check if offering is same year && same term
@@ -155,12 +116,16 @@ public class CourseOfferingsPanel extends BasePanel {
                 //Matching year and semester
                 JButton offeringButton = new JButton(getModel().getCourseSelected().getTitle() + " " + offering.getLocation());
                 offeringButton.addActionListener(e -> {
-                    System.out.println(getModel().getCourseSelected().getTitle() + " " + offering.getLocation());
+                    System.out.println(getModel().getCourseSelected().getTitle() + " " + offering.getLocation() + " " + offering.getYear());
                 });
+                JPanel singleOfferingButtonPanel = new JPanel();
+                singleOfferingButtonPanel.setLayout(new BorderLayout());
+                singleOfferingButtonPanel.add(offeringButton, BorderLayout.NORTH);
+                offeringsButtonPanel.add(singleOfferingButtonPanel);
             }
         }
-        offeringButtonPanel.add(offeringButtonPanel);
-        return offeringButtonPanel;
+        offeringsButtonPanel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        return offeringsButtonPanel;
     }
 
     private String semesterConverter(int col) {
@@ -176,13 +141,17 @@ public class CourseOfferingsPanel extends BasePanel {
 
     private Component makeYearLabel(int year) {
         JPanel yearLabelPanel = new JPanel();
+        yearLabelPanel.setLayout(new BoxLayout(yearLabelPanel, BoxLayout.LINE_AXIS));
         yearLabelPanel.add(new JLabel(String.valueOf(year - 1)));
+//        yearLabelPanel.add(Box.createHorizontalGlue());
+        yearLabelPanel.setBackground(Color.WHITE);
         return yearLabelPanel;
     }
 
     private Component makeSemesterLabel(String semester) {
         JPanel semesterLabelPanel = new JPanel();
         semesterLabelPanel.add(new JLabel(semester));
+        semesterLabelPanel.setBackground(Color.WHITE);
         return semesterLabelPanel;
     }
 
