@@ -136,7 +136,6 @@ public class CourseStatisticsPanel extends BasePanel {
 
     private void setupCampusOfferingsGraph() {
         if (offeringList.size() > 0) {
-            System.out.println("campus graph changing state");
             int[] campusData = new int[4];
             String[] campusTitles = {"Bby", "Sry", "Van", "Other"};
             for (Offering offering : offeringList) {
@@ -172,7 +171,6 @@ public class CourseStatisticsPanel extends BasePanel {
         getModel().addCourseObserver(new CourseObserver() {
             @Override
             public void stateChanged() {
-                System.out.println("state of graph changed");
                 clearStatisticsPanelAndUpdate();
             }
         });
