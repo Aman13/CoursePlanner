@@ -2,6 +2,7 @@ package ca.cmpt213.courseplanner.ui;
 
 import ca.cmpt213.courseplanner.BarGraph.BarGraphIcon;
 import ca.cmpt213.courseplanner.BarGraph.BarGraphModel;
+import ca.cmpt213.courseplanner.model.Course;
 import ca.cmpt213.courseplanner.model.CourseObserver;
 import ca.cmpt213.courseplanner.model.Model;
 import ca.cmpt213.courseplanner.model.Offering;
@@ -14,6 +15,7 @@ public class CourseStatisticsPanel extends BasePanel {
     private static final String TITLE = "Statistics";
     private JPanel courseStatisticsPanel;
     private java.util.List<Offering> offeringList;
+    private Course courseSelected;
     private BarGraphModel semesterOfferingsModel;
     private BarGraphModel campusOfferingsModel;
     private BarGraphIcon semesterOfferingsIcon;
@@ -46,14 +48,19 @@ public class CourseStatisticsPanel extends BasePanel {
     @Override
     public JPanel buildPanel() {
         courseStatisticsPanel = new JPanel();
-        courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
-        offeringList = getModel().getCurrentOfferings();
-//        semesterOfferingsIcon = makeBarGraphIcon(semesterOfferingsModel);
-//        campusOfferingsIcon = makeBarGraphIcon(campusOfferingsModel);
-        updateSemesterGraphPanel();
-        updateCampusGraphPanel();
-        courseStatisticsPanel.add(semesterGraphPanel);
-        courseStatisticsPanel.add(campusGraphPanel);
+        makeStatisticsPanel();
+//        courseStatisticsPanel = new JPanel();
+//        courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
+//        offeringList = getModel().getCurrentOfferings();
+//        courseSelected = getModel().getCourseSelected();
+//        if (courseSelected != null) {
+//            JLabel courseLabel = new JLabel("Course: " + courseSelected.getTitle());
+//            courseStatisticsPanel.add(courseLabel);
+//        }
+//        updateSemesterGraphPanel();
+//        updateCampusGraphPanel();
+//        courseStatisticsPanel.add(semesterGraphPanel);
+//        courseStatisticsPanel.add(campusGraphPanel);
         return courseStatisticsPanel;
     }
 
@@ -159,8 +166,26 @@ public class CourseStatisticsPanel extends BasePanel {
 
     private void clearStatisticsPanelAndUpdate() {
         courseStatisticsPanel.removeAll();
+        makeStatisticsPanel();
+        courseStatisticsPanel.revalidate();
+        courseStatisticsPanel.repaint();
+//        courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
+//        offeringList = getModel().getCurrentOfferings();
+//        updateSemesterGraphPanel();
+//        updateCampusGraphPanel();
+//        courseStatisticsPanel.add(semesterGraphPanel);
+//        courseStatisticsPanel.add(campusGraphPanel);
+    }
+
+    private void makeStatisticsPanel() {
         courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
         offeringList = getModel().getCurrentOfferings();
+        courseSelected = getModel().getCourseSelected();
+        if (courseSelected != null) {
+            JLabel courseLabel = new JLabel("Course: " + courseSelected.getTitle());
+            courseLabel.setHorizontalAlignment(SwingConstants.LEFT);
+            courseStatisticsPanel.add(courseLabel);
+        }
         updateSemesterGraphPanel();
         updateCampusGraphPanel();
         courseStatisticsPanel.add(semesterGraphPanel);

@@ -164,11 +164,13 @@ public class CourseDetailsPanel extends BasePanel {
             c.gridy = 0;
             c.anchor = GridBagConstraints.EAST;
             JLabel enrollTitle = makeTitleLabel("Enrollment (filled/cap): ");
+            enrollTitle.setPreferredSize(new Dimension(150, 20));
             componentInfoBox.add(enrollTitle);
             for (int y = 0; y < currentComponents.size(); y++){
                 c.gridy = y + 1;
                 JLabel enrollment = makeTitleLabel(currentComponents.get(y).getEnrollmentTotal() + "/" +
                                                     currentComponents.get(y).getEnrollmentCapacity());
+                enrollment.setPreferredSize(new Dimension(150, 10));
                 componentInfoBox.add(enrollment);
             }
         }
