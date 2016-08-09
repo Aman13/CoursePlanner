@@ -2,7 +2,7 @@ package ca.cmpt213.courseplanner.ui;
 
 import ca.cmpt213.courseplanner.BarGraph.BarGraphIcon;
 import ca.cmpt213.courseplanner.BarGraph.BarGraphModel;
-import ca.cmpt213.courseplanner.model.CoursePlannerObserver;
+import ca.cmpt213.courseplanner.model.CourseObserver;
 import ca.cmpt213.courseplanner.model.Model;
 import ca.cmpt213.courseplanner.model.Offering;
 
@@ -18,6 +18,10 @@ public class CourseStatisticsPanel extends BasePanel {
     private BarGraphModel campusOfferingsModel;
     private BarGraphIcon semesterOfferingsIcon;
     private BarGraphIcon campusOfferingsIcon;
+    private JLabel semesterGraph;
+    private JLabel campusGraph;
+    private JPanel semesterGraphPanel;
+    private JPanel campusGraphPanel;
 
     private final int SPRING_INDEX = 0;
     private final int SUMMER_INDEX = 1;
@@ -34,6 +38,8 @@ public class CourseStatisticsPanel extends BasePanel {
         super(model, TITLE);
         offeringList = new ArrayList<>();
         restrictResizing();
+        semesterGraph = new JLabel();
+        campusGraph = new JLabel();
         registerAsObserver();
     }
 
@@ -42,24 +48,49 @@ public class CourseStatisticsPanel extends BasePanel {
         courseStatisticsPanel = new JPanel();
         courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
         offeringList = getModel().getCurrentOfferings();
-        setupSemesterOfferingsGraph();
-        setupCampusOfferingsGraph();
-        semesterOfferingsIcon = makeBarGraphIcon(semesterOfferingsModel);
-        campusOfferingsIcon = makeBarGraphIcon(campusOfferingsModel);
-        courseStatisticsPanel.add(makeGraphPanel("Semester Offerings:", semesterOfferingsModel, semesterOfferingsIcon));
-        courseStatisticsPanel.add(makeGraphPanel("Campus Offerings:", campusOfferingsModel, campusOfferingsIcon));
+//        semesterOfferingsIcon = makeBarGraphIcon(semesterOfferingsModel);
+//        campusOfferingsIcon = makeBarGraphIcon(campusOfferingsModel);
+        updateSemesterGraphPanel();
+        updateCampusGraphPanel();
+        courseStatisticsPanel.add(semesterGraphPanel);
+        courseStatisticsPanel.add(campusGraphPanel);
         return courseStatisticsPanel;
     }
 
-    private JPanel makeGraphPanel(String title, BarGraphModel model, BarGraphIcon icon) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BorderLayout());
-        JLabel titleLabel = makeTitle(title);
-        panel.add(titleLabel, BorderLayout.NORTH);
-        JLabel iconLabel = new JLabel();
-        iconLabel.setIcon(icon);
-        panel.add(iconLabel, BorderLayout.CENTER);
-        return panel;
+    private void updateSemesterGraphPanel() {
+        setupSemesterOfferingsGraph();
+        semesterGraphPanel = new JPanel();
+        semesterGraphPanel.setLayout(new BorderLayout());
+        JLabel titleLabel = makeTitle("Semester Offerings:");
+        semesterGraphPanel.add(titleLabel, BorderLayout.NORTH);
+        semesterOfferingsIcon = makeBarGraphIcon(semesterOfferingsModel);
+        JLabel icon = new JLabel();
+        icon.setIcon(semesterOfferingsIcon);
+        semesterGraph = icon;
+//        semesterGraph.setIcon(semesterOfferingsIcon);
+        semesterGraphPanel.add(semesterGraph, BorderLayout.CENTER);
+    }
+
+    private void updateCampusGraphPanel() {
+        setupCampusOfferingsGraph();
+        campusGraphPanel = new JPanel();
+        campusGraphPanel.setLayout(new BorderLayout());
+        JLabel titleLabel = makeTitle("Campus Offerings:");
+        campusGraphPanel.add(titleLabel, BorderLayout.NORTH);
+        campusOfferingsIcon = makeBarGraphIcon(campusOfferingsModel);
+        JLabel icon = new JLabel();
+        icon.setIcon(campusOfferingsIcon);
+        campusGraph = icon;
+        //campusGraph.setIcon(campusOfferingsIcon);
+        campusGraphPanel.add(campusGraph, BorderLayout.CENTER);
+    }
+
+    private void setSemesterGraph() {
+        semesterGraph.setIcon(semesterOfferingsIcon);
+    }
+
+    private void setCampusGraph() {
+        campusGraph.setIcon(campusOfferingsIcon);
     }
 
     private BarGraphIcon makeBarGraphIcon(BarGraphModel model) {
@@ -105,6 +136,7 @@ public class CourseStatisticsPanel extends BasePanel {
 
     private void setupCampusOfferingsGraph() {
         if (offeringList.size() > 0) {
+            System.out.println("campus graph changing state");
             int[] campusData = new int[4];
             String[] campusTitles = {"Bby", "Sry", "Van", "Other"};
             for (Offering offering : offeringList) {
@@ -126,13 +158,22 @@ public class CourseStatisticsPanel extends BasePanel {
         }
     }
 
+    private void clearStatisticsPanelAndUpdate() {
+        courseStatisticsPanel.removeAll();
+        courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
+        offeringList = getModel().getCurrentOfferings();
+        updateSemesterGraphPanel();
+        updateCampusGraphPanel();
+        courseStatisticsPanel.add(semesterGraphPanel);
+        courseStatisticsPanel.add(campusGraphPanel);
+    }
+
     private void registerAsObserver() {
-        getModel().addObserver(new CoursePlannerObserver() {
+        getModel().addCourseObserver(new CourseObserver() {
             @Override
             public void stateChanged() {
-                offeringList = getModel().getCurrentOfferings();
-                setupSemesterOfferingsGraph();
-                setupCampusOfferingsGraph();
+                System.out.println("state of graph changed");
+                clearStatisticsPanelAndUpdate();
             }
         });
     }
