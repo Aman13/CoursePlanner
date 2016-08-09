@@ -1,5 +1,6 @@
 package ca.cmpt213.courseplanner.model;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
@@ -31,6 +32,7 @@ public class Model {
     private Course courseSelected;
     private List<Offering> currentOfferings;
     private Offering offeringSelected;
+    private List<CourseComponent> currentComponents;
 
     public Model () {
         lineList = new ArrayList<>();
@@ -78,7 +80,12 @@ public class Model {
 
     public void setCurrentOffering(Offering offering) {
         offeringSelected = offering;
-        notifyDepartmentObservers();
+        currentComponents = offering.getCurrentCourseComponents();
+        notifyCourseObservers();
+    }
+
+    public List<CourseComponent> getCurrentComponents() {
+        return currentComponents;
     }
 
     public String getDepartmentSelected() {

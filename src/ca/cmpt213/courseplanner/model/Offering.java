@@ -2,6 +2,7 @@ package ca.cmpt213.courseplanner.model;
 
 import com.sun.org.apache.xpath.internal.operations.Bool;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,35 @@ public class Offering {
 
     public void addComponent(int enrollmentCapacity, int enrollmentTotal, String componentCode) {
         courseComponents.add(new CourseComponent(enrollmentCapacity, enrollmentTotal, componentCode));
+    }
+
+    public List<CourseComponent> getCurrentCourseComponents() {
+        List<CourseComponent> currentComponents = new ArrayList<>();
+        if (courseComponents.size() > 0) {
+            List<CourseComponent> allComponents = new ArrayList<>(courseComponents);
+            String newCode = "";
+            int newCapacity = 0;
+            int newTotal = 0;
+            while (allComponents.size() > 0) {
+                newCode = allComponents.get(0).getComponentCode();
+                newCapacity = allComponents.get(0).getEnrollmentCapacity();
+                newTotal = allComponents.get(0).getEnrollmentTotal();
+                allComponents.remove(0);
+                int j = 0;
+                while (j < allComponents.size()) {
+                    if (newCode.equals(allComponents.get(j).getComponentCode())) {
+                        newCapacity += allComponents.get(j).getEnrollmentCapacity();
+                        newTotal += allComponents.get(j).getEnrollmentTotal();
+                        allComponents.remove(j);
+                        j--;
+                    }
+                    j++;
+                }
+                currentComponents.add(new CourseComponent(newCapacity, newTotal, newCode));
+            }
+            return currentComponents;
+        }
+        return currentComponents;
     }
 
     public String[] getInstructors() {
@@ -68,7 +98,7 @@ public class Offering {
         else return "";
     }
 
-    private String getInstructorsString() {
+    public String getInstructorsString() {
         String result = "";
         for (String instructor : instructors) {
             if (instructor.equals("(null)")) {
