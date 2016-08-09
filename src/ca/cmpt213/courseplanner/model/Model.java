@@ -71,6 +71,7 @@ public class Model {
     public void setCurrentCourse(Course course) {
         courseSelected = course;
         currentOfferings = course.getAllOfferings();
+        course.sortOfferingsBySemester(currentOfferings);
         notifyObservers();
     }
 

@@ -38,6 +38,25 @@ public class Offering {
         return this.semester;
     }
 
+    public int calculateYear() {
+        int termCode = semester;
+        int century = 0;
+        int year = 0;
+        termCode = termCode / 10;
+        year = termCode % 100;
+        termCode = termCode / 100;
+        century = termCode % 10;
+        if (century  == 0) {
+            // 20th century
+            year  = year + 1900;
+        } else if (century == 1) {
+            // 21st century
+            year = year + 2000;
+        }
+        System.out.println("term code: " + semester + ", year: " + year);
+        return year;
+    }
+
     private String getInstructorsString() {
         String result = "";
         for (String instructor : instructors) {
