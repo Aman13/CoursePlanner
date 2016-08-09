@@ -38,10 +38,10 @@ public class Offering {
         return this.semester;
     }
 
-    public int calculateYear() {
+    public int getYear() {
         int termCode = semester;
-        int century = 0;
-        int year = 0;
+        int century;
+        int year;
         termCode = termCode / 10;
         year = termCode % 100;
         termCode = termCode / 100;
@@ -53,8 +53,19 @@ public class Offering {
             // 21st century
             year = year + 2000;
         }
-        System.out.println("term code: " + semester + ", year: " + year);
         return year;
+    }
+
+    public String getSemesterTitle() {
+        int semesterCode = semester % 10;
+        if (semesterCode == 1) {
+            return "Spring";
+        } else if (semesterCode == 4) {
+            return "Summer";
+        } else if (semesterCode == 7) {
+            return "Fall";
+        }
+        else return "";
     }
 
     private String getInstructorsString() {

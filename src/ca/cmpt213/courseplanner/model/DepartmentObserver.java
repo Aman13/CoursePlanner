@@ -1,5 +1,5 @@
 package ca.cmpt213.courseplanner.model;
 
-public interface CoursePlannerObserver {
+public interface DepartmentObserver {
     void stateChanged();
 }
