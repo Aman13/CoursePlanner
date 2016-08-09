@@ -38,6 +38,36 @@ public class Offering {
         return this.semester;
     }
 
+    public int getYear() {
+        int termCode = semester;
+        int century;
+        int year;
+        termCode = termCode / 10;
+        year = termCode % 100;
+        termCode = termCode / 100;
+        century = termCode % 10;
+        if (century  == 0) {
+            // 20th century
+            year  = year + 1900;
+        } else if (century == 1) {
+            // 21st century
+            year = year + 2000;
+        }
+        return year;
+    }
+
+    public String getSemesterTitle() {
+        int semesterCode = semester % 10;
+        if (semesterCode == 1) {
+            return "Spring";
+        } else if (semesterCode == 4) {
+            return "Summer";
+        } else if (semesterCode == 7) {
+            return "Fall";
+        }
+        else return "";
+    }
+
     private String getInstructorsString() {
         String result = "";
         for (String instructor : instructors) {

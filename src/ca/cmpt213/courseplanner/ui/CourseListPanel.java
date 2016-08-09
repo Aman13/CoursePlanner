@@ -1,11 +1,10 @@
 package ca.cmpt213.courseplanner.ui;
 
 import ca.cmpt213.courseplanner.model.Course;
-import ca.cmpt213.courseplanner.model.CoursePlannerObserver;
+import ca.cmpt213.courseplanner.model.DepartmentObserver;
 import ca.cmpt213.courseplanner.model.Model;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
 import java.awt.*;
 
 public class CourseListPanel extends BasePanel {
@@ -65,7 +64,7 @@ public class CourseListPanel extends BasePanel {
     }
 
     private void registerAsObserver() {
-        getModel().addObserver(new CoursePlannerObserver() {
+        getModel().addDepartmentObserver(new DepartmentObserver() {
             @Override
             public void stateChanged() {
                 courseList = getModel().getCurrentCourses();

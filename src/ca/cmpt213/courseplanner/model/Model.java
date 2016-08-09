@@ -1,10 +1,8 @@
 package ca.cmpt213.courseplanner.model;
 
-import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.lang.reflect.Array;
 import java.util.*;
 import java.util.List;
 
@@ -26,7 +24,8 @@ public class Model {
 
     private List<String[]> lineList;
 
-    private List<CoursePlannerObserver> observers;
+    private List<DepartmentObserver> departmentObservers;
+    private List<CourseObserver> courseObservers;
     private String departmentSelected;
     private Course[] currentCourses;
     private Course courseSelected;
@@ -41,7 +40,8 @@ public class Model {
             e.printStackTrace();
         }
         buildDepartments();
-        observers = new ArrayList<>();
+        departmentObservers = new ArrayList<>();
+        courseObservers = new ArrayList<>();
         currentOfferings = new ArrayList<>();
         departmentSelected = "";
     }
@@ -50,7 +50,7 @@ public class Model {
         departmentSelected = department;
         if (underGradCheck || gradCheck) {
             currentCourses = filterCourses(departments.get(department).getAllCourses(), underGradCheck, gradCheck);
-            notifyObservers();
+            notifyDepartmentObservers();
         }
     }
 
@@ -69,14 +69,16 @@ public class Model {
     };
 
     public void setCurrentCourse(Course course) {
+        System.out.println(course.getTitle());
         courseSelected = course;
         currentOfferings = course.getAllOfferings();
-        notifyObservers();
+        course.sortOfferingsBySemester(currentOfferings);
+        notifyCourseObservers();
     }
 
     public void setCurrentOffering(Offering offering) {
         offeringSelected = offering;
-        notifyObservers();
+        notifyDepartmentObservers();
     }
 
     public String getDepartmentSelected() {
@@ -242,12 +244,22 @@ public class Model {
         }
     }
 
-    public void addObserver(CoursePlannerObserver observer) {
-        observers.add(observer);
+    public void addDepartmentObserver(DepartmentObserver observer) {
+        departmentObservers.add(observer);
     }
 
-    private void notifyObservers() {
-        for (CoursePlannerObserver observer : observers) {
+    public void addCourseObserver(CourseObserver observer) {
+        courseObservers.add(observer);
+    }
+
+    private void notifyDepartmentObservers() {
+        for (DepartmentObserver observer : departmentObservers) {
+            observer.stateChanged();
+        }
+    }
+
+    private void notifyCourseObservers() {
+        for (CourseObserver observer : courseObservers) {
             observer.stateChanged();
         }
     }

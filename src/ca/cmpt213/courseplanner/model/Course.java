@@ -36,7 +36,7 @@ public class Course {
         return Integer.valueOf("0" + catalogNumber.replaceAll("(\\d*).*", "$1"));
     }
 
-    private static void sortOfferingsBySemester(List<Offering> offeringList) {
+    public static void sortOfferingsBySemester(List<Offering> offeringList) {
         Comparator<Offering> offeringSorter = new Comparator<Offering>() {
             @Override
             public int compare(Offering offer1, Offering offer2) {
