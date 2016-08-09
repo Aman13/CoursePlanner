@@ -19,8 +19,8 @@ public class Main {
         leftPanel.add(new CourseListPanel(model));
 
         //Center Panel
-        JPanel centerPanel = new JPanel();
-        centerPanel.add(new CourseOfferingsPanel(model));
+//        JPanel centerPanel = new JPanel();
+//        centerPanel.add(new CourseOfferingsPanel(model));
 
         //Right Panel
         JPanel rightPanel = new JPanel();
@@ -33,7 +33,8 @@ public class Main {
         mainFrame.setLayout(new BorderLayout());
 
         mainFrame.add(leftPanel, BorderLayout.WEST);
-        mainFrame.add(centerPanel, BorderLayout.CENTER);
+//        mainFrame.add(centerPanel, BorderLayout.CENTER);
+        mainFrame.add(new CourseOfferingsPanel(model), BorderLayout.CENTER);
         mainFrame.add(rightPanel, BorderLayout.EAST);
 
 
