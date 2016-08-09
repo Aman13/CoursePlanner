@@ -62,8 +62,8 @@ public class CourseFilterPanel extends BasePanel {
     private Component makeCheckBox() {
         JPanel checkBoxPanel = new JPanel();
         checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.PAGE_AXIS));
-        underGradCheckBox = new JCheckBox("Include Grad Courses");
-        gradCheckBox = new JCheckBox("Include Undergrad Courses");
+        underGradCheckBox = new JCheckBox("Include Undergrad Courses");
+        gradCheckBox = new JCheckBox("Include Grad Courses");
         checkBoxPanel.add(underGradCheckBox);
         checkBoxPanel.add(gradCheckBox);
         return checkBoxPanel;
