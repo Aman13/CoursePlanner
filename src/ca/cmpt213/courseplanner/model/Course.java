@@ -30,6 +30,12 @@ public class Course {
         return this.subject + " " + this.catalogueNumber;
     }
 
+    public int getCourseNumber() {
+        String catalogNumber = this.catalogueNumber.replace("X", "0");
+        //I have no idea what this does, Brian Fraser recommended?
+        return Integer.valueOf("0" + catalogNumber.replaceAll("(\\d*).*", "$1"));
+    }
+
     private static void sortOfferingsBySemester(List<Offering> offeringList) {
         Comparator<Offering> offeringSorter = new Comparator<Offering>() {
             @Override
