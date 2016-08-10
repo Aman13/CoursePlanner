@@ -1,5 +1,10 @@
 package ca.cmpt213.courseplanner.model;
 
+/**
+ * Course component contains the enrollment,
+ * and component code. Used by the offering.
+ * @author Aram & Aman
+ */
 public class CourseComponent {
 
     private String componentCode;

@@ -7,6 +7,13 @@ import ca.cmpt213.courseplanner.model.Model;
 import javax.swing.*;
 import java.awt.*;
 
+
+/**
+ * Class builds the Course List panel and updates
+ * accordingly
+ * @author Aram & Aman
+ */
+
 public class CourseListPanel extends BasePanel {
     private static final String TITLE = "Course List";
     private JPanel courseListPanel;

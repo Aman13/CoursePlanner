@@ -7,11 +7,17 @@ import javax.swing.border.Border;
 import java.awt.BorderLayout;
 import java.io.FileNotFoundException;
 
+/**
+ * Class builds the project, making a model and passing
+ * the model to all the Jpanels, as well as build the JFrame
+ * @author Aram & Aman
+ */
+
+
 public class Main {
 
     public static void main(String[] args) {
         Model model = new Model();
-        model.dumpModel();
         //Left Panel
         JPanel leftPanel = new JPanel();
         leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.PAGE_AXIS));
@@ -19,8 +25,8 @@ public class Main {
         leftPanel.add(new CourseListPanel(model));
 
         //Center Panel
-//        JPanel centerPanel = new JPanel();
-//        centerPanel.add(new CourseOfferingsPanel(model));
+        JPanel centerPanel = new JPanel();
+        centerPanel.add(new CourseOfferingsPanel(model));
 
         //Right Panel
         JPanel rightPanel = new JPanel();

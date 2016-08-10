@@ -2,6 +2,12 @@ package ca.cmpt213.courseplanner.model;
 
 import java.util.HashMap;
 
+/**
+ * This class contains all the classes a specific
+ * department would have within a Course HashMap
+ * @author Aman & Aram
+ */
+
 public class Department {
     private String name;
     private HashMap<String, Course> courseList;
@@ -14,6 +20,7 @@ public class Department {
     public void addCourse(Course course) {
         courseList.put(course.getTitle(), course);
     }
+
 
     public boolean hasCourse(Course course) {
         Course[] courses = new Course[courseList.size()];

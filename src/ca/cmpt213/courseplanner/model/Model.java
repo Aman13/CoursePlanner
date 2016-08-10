@@ -7,6 +7,12 @@ import java.io.PrintWriter;
 import java.util.*;
 import java.util.List;
 
+/**
+ * This class contains the logic of the Course planner,
+ * parsing the csv files and having all the utility calls
+ * to get course, offerings and course components.
+ * @author Aman & Aram
+ */
 public class Model {
 
     private static final int DEFAULT_SIZE = 8;
@@ -56,6 +62,9 @@ public class Model {
         }
     }
 
+    /*
+    Filter Courses Depending if grad or undergrad is checked
+     */
     private Course[] filterCourses(Course[] allCourses, Boolean underGrad, Boolean grad) {
       ArrayList<Course> filteredCourseList = new ArrayList<>();
         for (Course course: allCourses) {
@@ -71,7 +80,6 @@ public class Model {
     };
 
     public void setCurrentCourse(Course course) {
-        System.out.println(course.getTitle());
         courseSelected = course;
         currentOfferings = course.getAllOfferings();
         course.sortOfferingsBySemester(currentOfferings);
@@ -86,10 +94,6 @@ public class Model {
 
     public List<CourseComponent> getCurrentComponents() {
         return currentComponents;
-    }
-
-    public String getDepartmentSelected() {
-        return departmentSelected;
     }
 
     public Course[] getCurrentCourses() {
@@ -119,7 +123,10 @@ public class Model {
         Arrays.sort(courses, courseSorter);
     }
 
-
+    /*
+    Once the CSV is read, the departments and the courses belonging
+    to those departments are added, building the model.
+     */
     private void buildDepartments() {
         departments = new HashMap<>();
         for (String[] line: lineList) {
@@ -205,13 +212,15 @@ public class Model {
 
     }
 
+    /*
+    Read CSV file
+     */
     public void getData() throws FileNotFoundException{
         try {
             Scanner scanner = new Scanner(new File(COURSE_DATA_FILE));
             scanner.nextLine();
             while (scanner.hasNextLine()) {
                 String line = scanner.nextLine();
-                //System.out.println(line);
                 String[] courseData = line.split(",");
                 lineList.add(courseData);
             }
@@ -245,7 +254,6 @@ public class Model {
                 }
             }
             writer.close();
-            System.out.println("Course info written to output file: " + OUTPUT.getAbsolutePath());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

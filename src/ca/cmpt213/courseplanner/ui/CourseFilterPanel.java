@@ -10,6 +10,12 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Class builds the Course filter panel and updates
+ * accordingly
+ * @author Aram & Aman
+ */
+
 public class CourseFilterPanel extends BasePanel {
     private static String TITLE = "Course List Filter";
     private JPanel courseFilterPanel;

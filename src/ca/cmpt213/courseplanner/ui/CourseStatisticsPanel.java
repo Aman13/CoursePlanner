@@ -11,6 +11,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
+
+/**
+ * Class builds the Course Statistics panel and updates
+ * accordingly
+ * @author Aram & Aman
+ */
+
+
 public class CourseStatisticsPanel extends BasePanel {
     private static final String TITLE = "Statistics";
     private JPanel courseStatisticsPanel;
