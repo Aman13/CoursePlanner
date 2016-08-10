@@ -6,6 +6,10 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
+/**
+ * This class is the abstract base class for all JPanels
+ * @author Aram & Aman
+ */
 public abstract class BasePanel extends JPanel {
     private static final int BORDER_PADDING = 2;
     private Model model;

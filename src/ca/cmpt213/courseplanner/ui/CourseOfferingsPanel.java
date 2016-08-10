@@ -10,6 +10,13 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Class builds the Course Offerings panel and updates
+ * accordingly
+ * @author Aram & Aman
+ */
+
+
 public class CourseOfferingsPanel extends BasePanel {
     private static final int COLUMNS = 4;
     private static final int HEIGHT = 800;
@@ -83,17 +90,12 @@ public class CourseOfferingsPanel extends BasePanel {
         courseOfferingPanel.add(makeSemesterLabel("Summer"));
         gridBagConstraints.gridx = 3;
         courseOfferingPanel.add(makeSemesterLabel("Fall"));
-        System.out.println("earliest year: " + earliestYear);
-        System.out.println("latestYear: " + latestYear);
-        System.out.println("Range: " + rangeYear);
-        //Loop to build offerings
+        //Loop to build course offerings
         for (int row = 0; row < rangeYear + 1; row++) {
             for (int col = 0; col < COLUMNS; col++) {
                 gridBagConstraints.fill = GridBagConstraints.BOTH;
                 gridBagConstraints.gridx = col;
                 gridBagConstraints.gridy = row;
-                gridBagConstraints.weightx = 1;
-                gridBagConstraints.weighty = 1;
                 if (row != 0 && col == 0) {
                     //Make year label
                     gridBagConstraints.weightx = 0;
@@ -122,7 +124,6 @@ public class CourseOfferingsPanel extends BasePanel {
                 JButton offeringButton = new JButton(getModel().getCourseSelected().getTitle() + " " + offering.getLocation());
                 offeringButton.addActionListener(e -> {
                     getModel().setCurrentOffering(offering);
-                    System.out.println(getModel().getCourseSelected().getTitle() + " " + offering.getLocation() + " " + offering.getYear());
                 });
                 JPanel singleOfferingButtonPanel = new JPanel();
                 singleOfferingButtonPanel.setLayout(new BorderLayout());

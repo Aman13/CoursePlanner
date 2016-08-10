@@ -8,6 +8,11 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
+/**
+ * Class builds the Course details panel and updates
+ * accordingly
+ * @author Aram & Aman
+ */
 public class CourseDetailsPanel extends BasePanel {
     private static final String TITLE = "Details of Course Offering";
     private JPanel courseDetailsPanel;
@@ -107,7 +112,6 @@ public class CourseDetailsPanel extends BasePanel {
         } else {
             infoBox.removeAll();
             infoBox.setLayout(new GridBagLayout());
-            System.out.println("updating info box " + offeringSelected.getSemesterTitle());
             GridBagConstraints constraint = new GridBagConstraints();
             String[] titleLabelArray = {"Course Name: ", "Semester: ", "Location: ", "Instructors: "};
             String[] infoLabelArray = {courseSelected.getTitle(), "" + offeringSelected.getSemester(),

@@ -5,6 +5,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * Holds all information regarding a course,
+ * each course has a list of offerings
+ * @author Aram and Aman
+ */
 public class Course {
 
     private static final int DEFAULT_SIZE = 8;
@@ -30,9 +35,9 @@ public class Course {
         return this.subject + " " + this.catalogueNumber;
     }
 
+    //Brian Fraser provided code
     public int getCourseNumber() {
         String catalogNumber = this.catalogueNumber.replace("X", "0");
-        //I have no idea what this does, Brian Fraser recommended?
         return Integer.valueOf("0" + catalogNumber.replaceAll("(\\d*).*", "$1"));
     }
 
@@ -68,6 +73,7 @@ public class Course {
         return offerings;
     }
 
+    //Get an existing offering
     public Offering getOffering(String[] line) {
         String[] instructorsArray = getInstructors(line);
         boolean allInstructorsMatch;
@@ -78,7 +84,7 @@ public class Course {
                 if (instructorsArray.length == offering.getInstructors().length) {
                     for (int i = 0; i < instructorsArray.length; i++) {
                         if (offering.getInstructors()[i].equals(instructorsArray[i])) {
-                            // Do nothing allinstructors remains true;
+                            // Do nothing all instructors remains true;
                         } else {
                             allInstructorsMatch = false;
                         }
@@ -104,6 +110,7 @@ public class Course {
         return offerings.size();
     }
 
+    //Check if an offering already exists
     public Boolean hasEquivalentOffering(String[] line) {
         String[] instructorsArray = getInstructors(line);
         boolean allInstructorsMatch;
@@ -128,6 +135,7 @@ public class Course {
         return false;
     }
 
+    //Utility function to get all the instructors from a read line of the csv
     private String[] getInstructors(String[] line) {
         if (line.length == DEFAULT_SIZE) {
             String[] instructorArray = {line[INSTRUCTOR]};
