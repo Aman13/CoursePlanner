@@ -121,6 +121,7 @@ public class CourseOfferingsPanel extends BasePanel {
                 //Matching year and semester
                 JButton offeringButton = new JButton(getModel().getCourseSelected().getTitle() + " " + offering.getLocation());
                 offeringButton.addActionListener(e -> {
+                    getModel().setCurrentOffering(offering);
                     System.out.println(getModel().getCourseSelected().getTitle() + " " + offering.getLocation() + " " + offering.getYear());
                 });
                 JPanel singleOfferingButtonPanel = new JPanel();

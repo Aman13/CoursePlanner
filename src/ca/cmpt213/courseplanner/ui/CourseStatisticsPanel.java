@@ -2,6 +2,7 @@ package ca.cmpt213.courseplanner.ui;
 
 import ca.cmpt213.courseplanner.BarGraph.BarGraphIcon;
 import ca.cmpt213.courseplanner.BarGraph.BarGraphModel;
+import ca.cmpt213.courseplanner.model.Course;
 import ca.cmpt213.courseplanner.model.CourseObserver;
 import ca.cmpt213.courseplanner.model.Model;
 import ca.cmpt213.courseplanner.model.Offering;
@@ -14,6 +15,7 @@ public class CourseStatisticsPanel extends BasePanel {
     private static final String TITLE = "Statistics";
     private JPanel courseStatisticsPanel;
     private java.util.List<Offering> offeringList;
+    private Course courseSelected;
     private BarGraphModel semesterOfferingsModel;
     private BarGraphModel campusOfferingsModel;
     private BarGraphIcon semesterOfferingsIcon;
@@ -32,7 +34,7 @@ public class CourseStatisticsPanel extends BasePanel {
     private final int VAN_INDEX = 2;
     private final int OTHER_INDEX = 3;
 
-    private final int GRAPH_SIZE = 200;
+    private final int GRAPH_SIZE = 250;
 
     public CourseStatisticsPanel(Model model) {
         super(model, TITLE);
@@ -46,14 +48,7 @@ public class CourseStatisticsPanel extends BasePanel {
     @Override
     public JPanel buildPanel() {
         courseStatisticsPanel = new JPanel();
-        courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
-        offeringList = getModel().getCurrentOfferings();
-//        semesterOfferingsIcon = makeBarGraphIcon(semesterOfferingsModel);
-//        campusOfferingsIcon = makeBarGraphIcon(campusOfferingsModel);
-        updateSemesterGraphPanel();
-        updateCampusGraphPanel();
-        courseStatisticsPanel.add(semesterGraphPanel);
-        courseStatisticsPanel.add(campusGraphPanel);
+        makeStatisticsPanel();
         return courseStatisticsPanel;
     }
 
@@ -67,7 +62,6 @@ public class CourseStatisticsPanel extends BasePanel {
         JLabel icon = new JLabel();
         icon.setIcon(semesterOfferingsIcon);
         semesterGraph = icon;
-//        semesterGraph.setIcon(semesterOfferingsIcon);
         semesterGraphPanel.add(semesterGraph, BorderLayout.CENTER);
     }
 
@@ -81,16 +75,7 @@ public class CourseStatisticsPanel extends BasePanel {
         JLabel icon = new JLabel();
         icon.setIcon(campusOfferingsIcon);
         campusGraph = icon;
-        //campusGraph.setIcon(campusOfferingsIcon);
         campusGraphPanel.add(campusGraph, BorderLayout.CENTER);
-    }
-
-    private void setSemesterGraph() {
-        semesterGraph.setIcon(semesterOfferingsIcon);
-    }
-
-    private void setCampusGraph() {
-        campusGraph.setIcon(campusOfferingsIcon);
     }
 
     private BarGraphIcon makeBarGraphIcon(BarGraphModel model) {
@@ -115,10 +100,10 @@ public class CourseStatisticsPanel extends BasePanel {
             int[] semesterData = new int[3];
             String[] semesterTitles = {"Spring", "Summer", "Fall"};
             for (Offering offering : offeringList) {
-                if (offering.getSemester() % 10 == 1) {
+                if (offering.getSemesterTitle().equals("Spring")) {
                     //spring
                     semesterData[SPRING_INDEX]++;
-                } else if (offering.getSemester() % 10 == 4) {
+                } else if (offering.getSemesterTitle().equals("Summer")) {
                     //summer
                     semesterData[SUMMER_INDEX]++;
                 } else {
@@ -159,8 +144,23 @@ public class CourseStatisticsPanel extends BasePanel {
 
     private void clearStatisticsPanelAndUpdate() {
         courseStatisticsPanel.removeAll();
+        makeStatisticsPanel();
+        courseStatisticsPanel.revalidate();
+        courseStatisticsPanel.repaint();
+    }
+
+    private void makeStatisticsPanel() {
         courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
         offeringList = getModel().getCurrentOfferings();
+        courseSelected = getModel().getCourseSelected();
+        JPanel coursePanel = new JPanel();
+        coursePanel.setLayout(new BorderLayout());
+        JLabel courseLabel = new JLabel("Course: ");
+        if (courseSelected != null) {
+            courseLabel.setText("Course: " + courseSelected.getTitle());
+        }
+        coursePanel.add(courseLabel, BorderLayout.NORTH);
+        courseStatisticsPanel.add(coursePanel);
         updateSemesterGraphPanel();
         updateCampusGraphPanel();
         courseStatisticsPanel.add(semesterGraphPanel);
