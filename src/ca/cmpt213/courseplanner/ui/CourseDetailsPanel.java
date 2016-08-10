@@ -83,24 +83,24 @@ public class CourseDetailsPanel extends BasePanel {
         JLabel[] infoLabels = new JLabel[4];
 
         if (offeringSelected == null) {
-            GridBagConstraints c = new GridBagConstraints();
+            GridBagConstraints constraint = new GridBagConstraints();
             String[] labelTitleArray = {"Course Name: ", "Semester: ", "Location: ", "Instructors: "};
             for (int y = 0; y < 4; y++) {
                 for (int x = 0; x < 2; x++) {
-                    c.fill = GridBagConstraints.BOTH;
-                    c.gridx = x;
-                    c.gridy = y;
+                    constraint.fill = GridBagConstraints.BOTH;
+                    constraint.gridx = x;
+                    constraint.gridy = y;
                     if (x ==  0) {
-                        c.weightx = 0;
-                        c.weighty = 0;
-                        infoBox.add(makeTitleLabel(labelTitleArray[y]), c);
+                        constraint.weightx = 0;
+                        constraint.weighty = 0;
+                        infoBox.add(makeTitleLabel(labelTitleArray[y]), constraint);
                     } else {
-                        c.weightx = 1;
-                        c.weighty = 1;
+                        constraint.weightx = 1;
+                        constraint.weighty = 1;
                         infoLabels[y] = makeInfoLabel(" ");
                         JPanel infoPanel = makeInfoPanel();
                         infoPanel.add(infoLabels[y]);
-                        infoBox.add(infoPanel, c);
+                        infoBox.add(infoPanel, constraint);
                     }
                 }
             }
@@ -108,25 +108,25 @@ public class CourseDetailsPanel extends BasePanel {
             infoBox.removeAll();
             infoBox.setLayout(new GridBagLayout());
             System.out.println("updating info box " + offeringSelected.getSemesterTitle());
-            GridBagConstraints c = new GridBagConstraints();
+            GridBagConstraints constraint = new GridBagConstraints();
             String[] titleLabelArray = {"Course Name: ", "Semester: ", "Location: ", "Instructors: "};
             String[] infoLabelArray = {courseSelected.getTitle(), "" + offeringSelected.getSemester(),
                     offeringSelected.getLocation(), offeringSelected.getInstructorsString()};
             for (int y = 0; y < 4; y++) {
                 for (int x = 0; x < 2; x++) {
-                    c.fill = GridBagConstraints.BOTH;
-                    c.gridx = x;
-                    c.gridy = y;
+                    constraint.fill = GridBagConstraints.BOTH;
+                    constraint.gridx = x;
+                    constraint.gridy = y;
                     if (x ==  0) {
-                        c.weightx = 0;
-                        c.weighty = 0;
-                        infoBox.add(makeTitleLabel(titleLabelArray[y]), c);
+                        constraint.weightx = 0;
+                        constraint.weighty = 0;
+                        infoBox.add(makeTitleLabel(titleLabelArray[y]), constraint);
                     } else {
-                        c.weightx = 1;
-                        c.weighty = 1;
+                        constraint.weightx = 1;
+                        constraint.weighty = 1;
                         JPanel infoPanel = makeInfoPanel();
                         infoPanel.add(makeInfoLabel(infoLabelArray[y]));
-                        infoBox.add(infoPanel, c);
+                        infoBox.add(infoPanel, constraint);
                     }
                 }
             }
@@ -142,36 +142,37 @@ public class CourseDetailsPanel extends BasePanel {
         componentInfoBox.setLayout(new GridBagLayout());
 
         if (currentComponents.size() > 0) {
-            GridBagConstraints c = new GridBagConstraints();
-            c.fill = GridBagConstraints.HORIZONTAL;
-            c.weighty = 0;
-            c.weightx = 0;
+            GridBagConstraints constraint = new GridBagConstraints();
+            constraint.fill = GridBagConstraints.HORIZONTAL;
+            constraint.weighty = 1;
+            constraint.weightx = 1;
 
             //Section Type
-            c.gridx = 0;
-            c.gridy = 0;
-            c.anchor = GridBagConstraints.WEST;
+            constraint.gridx = 0;
+            constraint.gridy = 0;
+            constraint.anchor = GridBagConstraints.WEST;
             JLabel sectionTitle = makeTitleLabel("Section Type: ");
-            componentInfoBox.add(sectionTitle);
+            componentInfoBox.add(sectionTitle, constraint);
             for (int y = 0; y < currentComponents.size(); y++) {
-                c.gridy = y + 1;
+                constraint.gridy = y + 1;
+
                 JLabel section = makeTitleLabel(currentComponents.get(y).getComponentCode());
-                componentInfoBox.add(section);
+                componentInfoBox.add(section, constraint);
             }
 
             //Enrollment total/capacity
-            c.gridx = 1;
-            c.gridy = 0;
-            c.anchor = GridBagConstraints.EAST;
+            constraint.gridx = 1;
+            constraint.gridy = 0;
+            constraint.anchor = GridBagConstraints.EAST;
             JLabel enrollTitle = makeTitleLabel("Enrollment (filled/cap): ");
             enrollTitle.setPreferredSize(new Dimension(150, 20));
-            componentInfoBox.add(enrollTitle);
+            componentInfoBox.add(enrollTitle, constraint);
             for (int y = 0; y < currentComponents.size(); y++){
-                c.gridy = y + 1;
+                constraint.gridy = y + 1;
                 JLabel enrollment = makeTitleLabel(currentComponents.get(y).getEnrollmentTotal() + "/" +
                                                     currentComponents.get(y).getEnrollmentCapacity());
                 enrollment.setPreferredSize(new Dimension(150, 10));
-                componentInfoBox.add(enrollment);
+                componentInfoBox.add(enrollment, constraint);
             }
         }
     }

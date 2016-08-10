@@ -49,18 +49,6 @@ public class CourseStatisticsPanel extends BasePanel {
     public JPanel buildPanel() {
         courseStatisticsPanel = new JPanel();
         makeStatisticsPanel();
-//        courseStatisticsPanel = new JPanel();
-//        courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
-//        offeringList = getModel().getCurrentOfferings();
-//        courseSelected = getModel().getCourseSelected();
-//        if (courseSelected != null) {
-//            JLabel courseLabel = new JLabel("Course: " + courseSelected.getTitle());
-//            courseStatisticsPanel.add(courseLabel);
-//        }
-//        updateSemesterGraphPanel();
-//        updateCampusGraphPanel();
-//        courseStatisticsPanel.add(semesterGraphPanel);
-//        courseStatisticsPanel.add(campusGraphPanel);
         return courseStatisticsPanel;
     }
 
@@ -74,7 +62,6 @@ public class CourseStatisticsPanel extends BasePanel {
         JLabel icon = new JLabel();
         icon.setIcon(semesterOfferingsIcon);
         semesterGraph = icon;
-//        semesterGraph.setIcon(semesterOfferingsIcon);
         semesterGraphPanel.add(semesterGraph, BorderLayout.CENTER);
     }
 
@@ -88,16 +75,7 @@ public class CourseStatisticsPanel extends BasePanel {
         JLabel icon = new JLabel();
         icon.setIcon(campusOfferingsIcon);
         campusGraph = icon;
-        //campusGraph.setIcon(campusOfferingsIcon);
         campusGraphPanel.add(campusGraph, BorderLayout.CENTER);
-    }
-
-    private void setSemesterGraph() {
-        semesterGraph.setIcon(semesterOfferingsIcon);
-    }
-
-    private void setCampusGraph() {
-        campusGraph.setIcon(campusOfferingsIcon);
     }
 
     private BarGraphIcon makeBarGraphIcon(BarGraphModel model) {
@@ -122,10 +100,10 @@ public class CourseStatisticsPanel extends BasePanel {
             int[] semesterData = new int[3];
             String[] semesterTitles = {"Spring", "Summer", "Fall"};
             for (Offering offering : offeringList) {
-                if (offering.getSemester() % 10 == 1) {
+                if (offering.getSemesterTitle().equals("Spring")) {
                     //spring
                     semesterData[SPRING_INDEX]++;
-                } else if (offering.getSemester() % 10 == 4) {
+                } else if (offering.getSemesterTitle().equals("Summer")) {
                     //summer
                     semesterData[SUMMER_INDEX]++;
                 } else {
@@ -169,23 +147,20 @@ public class CourseStatisticsPanel extends BasePanel {
         makeStatisticsPanel();
         courseStatisticsPanel.revalidate();
         courseStatisticsPanel.repaint();
-//        courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
-//        offeringList = getModel().getCurrentOfferings();
-//        updateSemesterGraphPanel();
-//        updateCampusGraphPanel();
-//        courseStatisticsPanel.add(semesterGraphPanel);
-//        courseStatisticsPanel.add(campusGraphPanel);
     }
 
     private void makeStatisticsPanel() {
         courseStatisticsPanel.setLayout(new BoxLayout(courseStatisticsPanel, BoxLayout.PAGE_AXIS));
         offeringList = getModel().getCurrentOfferings();
         courseSelected = getModel().getCourseSelected();
+        JPanel coursePanel = new JPanel();
+        coursePanel.setLayout(new BorderLayout());
+        JLabel courseLabel = new JLabel("Course: ");
         if (courseSelected != null) {
-            JLabel courseLabel = new JLabel("Course: " + courseSelected.getTitle());
-            courseLabel.setHorizontalAlignment(SwingConstants.LEFT);
-            courseStatisticsPanel.add(courseLabel);
+            courseLabel.setText("Course: " + courseSelected.getTitle());
         }
+        coursePanel.add(courseLabel, BorderLayout.NORTH);
+        courseStatisticsPanel.add(coursePanel);
         updateSemesterGraphPanel();
         updateCampusGraphPanel();
         courseStatisticsPanel.add(semesterGraphPanel);
